@@ -1,0 +1,36 @@
+.handle-card {
+    background-color: antiquewhite;
+    border-radius: 20px;
+    border: solid;
+    display:inline-block;
+    width: 50vh;
+    height: 10vh;
+    position: absolute;
+    top: 30vh;
+    left: 80vh;
+    text-align: center;
+}
+
+.problem-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.problem-card {
+    border: black;
+    border-style: solid;
+    border-radius: 20px;
+    text-align: center;
+    margin-top: 1rem;
+    background-color: rgb(240, 235, 227);
+    font-size:xx-large;  
+    padding:none;
+    width: 63vh;
+    height:48vh;
+    margin-left: 5vh;
+}
+
+.problem-data {
+    font-size: x-large;
+    text-align: left;
+}

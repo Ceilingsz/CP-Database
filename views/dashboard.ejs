@@ -1,0 +1,17 @@
+<%- include("partials/header.ejs") %>
+
+<div class="problem-container">
+    <% for(let i = 0 ; i < problemsData.length; i++){ %>
+        <div class="problem-card">
+            <div style="border-bottom: solid;">
+            <%= problemsData[i].problemname %>
+            </div>
+            <% let submissionLink = "https://codeforces.com/contest/" + problemsData[i].problemid + "/submission/" + problemsData[i].submmissionID %>
+            <ul class="problem-data">
+                <li>
+                 <a href="<% submissionLink %>" > Submission Link </a> 
+                 </li>
+            </ul>
+        </div>  
+    <% } %>
+</div>

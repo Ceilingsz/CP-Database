@@ -1,0 +1,19 @@
+<%- include("partials/header.ejs") %>
+
+<div class="upload-card">
+    <form action="/submit" method="POST">
+        <div>
+            <label for="submission-code">Enter the submission code: </label>
+        </div>
+        <div>
+            <input id="sub-code" type="text" name="sub-code" />
+        </div>
+        <div>
+            <label for="comments">Enter comments/explanation for the solution</label>
+        </div>
+        <div>
+            <textarea name="comments" id="comments" maxlength="300"></textarea>
+        </div>
+        <input type="submit" value="Upload">
+    </form>
+</div>

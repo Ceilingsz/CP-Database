@@ -4,7 +4,7 @@
     <% for(let i = 0 ; i < problemsData.length; i++){ %>
         <div class="problem-card">
             <div style="border-bottom: solid;">
-            <%= problemsData.problemid : problemsData[i].problemname %>
+            <%= problemsData.problemid %> : <%= problemsData[i].problemname %>
             </div>
             <% let submissionLink = "https://codeforces.com/contest/" + problemsData[i].problemid + "/submission/" + problemsData[i].submmissionID %>
             <ul class="problem-data">

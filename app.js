@@ -24,7 +24,6 @@ app.get("/", (req, res) => {
 });
 
 app.get("/dashboard", async (req, res) => {
-    let ListProblems = 'hi';
     try {
         const result = await db.query("SELECT * from (select * from problems ORDER BY \"sno\" desc LIMIT 10) sub ORDER BY \"sno\" ASC");
         const ListProblems = result.rows;
@@ -35,6 +34,10 @@ app.get("/dashboard", async (req, res) => {
         res.status(500).send("Error occurred while fetching problems");
     }
 });
+
+app.get("/upload", (req, res) => {
+    res.render("problemupload.ejs")
+})
 
 app.post("/submithandle", (req, res) => {
     handle = req.body.currentHandle;

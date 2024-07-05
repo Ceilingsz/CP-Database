@@ -6,8 +6,8 @@
     width: 50vh;
     height: 10vh;
     position: absolute;
-    top: 30vh;
-    left: 80vh;
+    top: 30%;
+    left: 40%;
     text-align: center;
 }
 
@@ -33,4 +33,19 @@
 .problem-data {
     font-size: x-large;
     text-align: left;
+}
+
+.upload-card {
+    border: black;
+    border-style: solid;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width:fit-content;
+    padding:5px;
+    position: absolute;
+    top: 30%;
+    left: 40%;
+    background-color: antiquewhite;
 }

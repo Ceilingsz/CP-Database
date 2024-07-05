@@ -7,7 +7,8 @@ const port = 3000;
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
-let handle = "";
+
+const tableName = "problems";
 
 const db = new pg.Client({
     user:"postgres",
@@ -25,7 +26,7 @@ app.get("/", (req, res) => {
 
 app.get("/dashboard", async (req, res) => {
     try {
-        const result = await db.query("SELECT * from (select * from problems ORDER BY \"sno\" desc LIMIT 10) sub ORDER BY \"sno\" ASC");
+        const result = await db.query(`SELECT * from (select * from ${tableName} ORDER BY \"sno\" desc LIMIT 10) sub ORDER BY \"sno\" ASC`);
         const ListProblems = result.rows;
         console.log(ListProblems);
         res.render("dashboard.ejs", { problemsData: ListProblems });
@@ -39,11 +40,44 @@ app.get("/upload", (req, res) => {
     res.render("problemupload.ejs")
 })
 
-app.post("/submithandle", (req, res) => {
-    handle = req.body.currentHandle;
-    console.log(handle);
-    res.redirect("/dashboard");
-})
+app.post("/submit", async (req, res) => {
+    const uploadedProblemID = req.body.subCode;
+    const handle = req.body.currentHandle;
+    const comment = req.body.comments;
+    let uploadedProblem = "";
+    console.log(handle)
+    const CF_request =  await axios.get(`https://codeforces.com/api/user.status?handle=${handle}&from=1&count=100000`);
+    const recentSubmissions = CF_request.data.result;
+    console.log(uploadedProblemID);
+    for(let i = 0; i < recentSubmissions.length; i++){
+        if(recentSubmissions[i].id == uploadedProblemID){
+            uploadedProblem = recentSubmissions[i];
+            break;
+        }
+    }
+    
+    if(uploadedProblem === ""){
+        let errorMessage = "Could not find submission in user history.";
+        res.render("problemupload.ejs", {message : errorMessage})
+    } 
+    else{
+        let dbArray = [handle, uploadedProblem.problem.contestId + uploadedProblem.problem.index, uploadedProblem.problem.name];
+        console.log(dbArray);
+        let problemTags = uploadedProblem.problem.tags.map((tag) => {
+            return '"' + tag + '"'
+        });
+        let sizeArray = ["$1", "$2", "$3"]
+        for(let i = 0 ; i < uploadedProblem.problem.tags.length; i++){
+            dbArray.push('t');
+            sizeArray.push(`$${i+4}`);
+        }
+    
+    let text = `INSERT INTO ${tableName} ("user", problemid, problemname,` + problemTags.toString() + ") VALUES (" + sizeArray.toString() + ")";
+    console.log(text);
+    db.query(text, dbArray)
+    res.redirect("/upload");
+    }
+});
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);

@@ -1,12 +1,23 @@
 <%- include("partials/header.ejs") %>
 
 <div class="upload-card">
+    <% if(locals.message){ %>
+    <div>
+         <%= message %> 
+    </div>
+        <% } %>
     <form action="/submit" method="POST">
+        <div>
+        <label for="handle">Enter handle to fetch submissions from: </label>
+        </div>
+        <div>
+        <input id="handle" type="text" name="currentHandle"/>
+        </div>
         <div>
             <label for="submission-code">Enter the submission code: </label>
         </div>
         <div>
-            <input id="sub-code" type="text" name="sub-code" />
+            <input id="subCode" type="text" name="subCode" />
         </div>
         <div>
             <label for="comments">Enter comments/explanation for the solution</label>

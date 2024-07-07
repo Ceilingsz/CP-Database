@@ -67,17 +67,42 @@ app.post("/submit", async (req, res) => {
             return '"' + tag + '"'
         });
         let sizeArray = ["$1", "$2", "$3"]
-        for(let i = 0 ; i < uploadedProblem.problem.tags.length; i++){
-            dbArray.push('t');
+        for(let i = 0 ; i < uploadedProblem.problem.tags.length + 1; i++){
+            if(i < uploadedProblem.problem.tags.length){
+                dbArray.push('t');
+            }
             sizeArray.push(`$${i+4}`);
         }
-    
-    let text = `INSERT INTO ${tableName} ("user", problemid, problemname,` + problemTags.toString() + ") VALUES (" + sizeArray.toString() + ")";
-    console.log(text);
-    db.query(text, dbArray)
-    res.redirect("/upload");
+        dbArray.push(uploadedProblemID);
+        console.log(dbArray);
+        let text = `INSERT INTO ${tableName} ("user", problemid, problemname,` + problemTags.toString() + ",\"submissionID\") VALUES (" + sizeArray.toString() + ")" ;
+        console.log(text);
+        db.query(text, dbArray)
+        res.redirect("/upload");
     }
 });
+
+app.post("/tag", async (req, res) => {
+    let tag = req.body["tagselect"];
+    console.log(req.body["tagselect"]);
+    try {
+        let dbRequest = `SELECT * FROM ${tableName} where `;
+        for(let i = 0; i < tag.length; i++){
+            dbRequest += "\"" + tag[i] + "\" ";
+            dbRequest += "= 't' ";
+            if(i < tag.length - 1)
+                dbRequest += "AND ";
+        }
+        console.log(dbRequest)
+        const result = await db.query(dbRequest);
+        const ListProblems = result.rows;
+        console.log(ListProblems);
+        res.render("dashboard.ejs", { problemsData: ListProblems });
+    } catch (err) {
+        console.error("Failed to make query", err.stack);
+        res.status(500).send("Error occurred while fetching problems");
+    }
+})
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);

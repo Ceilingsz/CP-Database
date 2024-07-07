@@ -2,7 +2,6 @@
 <html>
 
 <head>
-
 	<!-- Including the bootstrap CDN -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
@@ -12,6 +11,10 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
 	</script>
 	<link rel="stylesheet" href="css/styles.css">
+
+	<!-- Including the Select2 CDN-->
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 
 <body>
@@ -25,6 +28,11 @@
 		</ul>
 		<ul class="navbar-nav ml-auto">
 			<li class="nav-item active">
+				<a class="nav-link" href="/dashboard" style="color:black; font-weight: bold;">
+					Dashboard
+				</a>
+			</li>
+			<li class="nav-item active">
 				<a class="nav-link" href="/upload" style="color:black; font-weight: bold;">
 					Upload problem
 				</a>
@@ -32,11 +40,6 @@
 			<li class="nav-item active">
 				<a class="nav-link" href="/" style="color:black; font-weight: bold;">
 					Change Handle
-				</a>
-			</li>
-			<li class="nav-item active">
-				<a class="nav-link" href="#" style="color:black; font-weight: bold;">
-					Settings
 				</a>
 			</li>
 		</ul>

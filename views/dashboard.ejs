@@ -4,21 +4,72 @@
     <% for(let i = 0 ; i < problemsData.length; i++){ %>
         <div class="problem-card">
             <div style="border-bottom: solid;">
-            <%= problemsData.problemid %> : <%= problemsData[i].problemname %>
+            <%= problemsData[i].problemid %> : <%= problemsData[i].problemname %>
             </div>
-            <% let submissionLink = "https://codeforces.com/contest/" + problemsData[i].problemid + "/submission/" + problemsData[i].submmissionID %>
+            <% let submissionLink = "https://codeforces.com/contest/" + problemsData[i].problemid.substring(0, problemsData[i].problemid.length-1) + "/submission/" + problemsData[i].submissionID %>
             <ul class="problem-data">
                 <li>
-                 <a href="<% submissionLink %>" > Submission Link </a> 
+                 <a href="<%= submissionLink %>" > Submission Link </a> 
                 </li>
                 <li>
                     Tags : <% for(let key in problemsData[i]){  %>
-                        <% if(problemsData[i].hasOwnProperty(key) && problemsData[i][key] !== null && (key !== 'sno' && key !== 'user' && key !== 'problemid' && key !== 'problemname')) {%> 
+                        <% if(problemsData[i].hasOwnProperty(key) && problemsData[i][key] !== null && (key !== 'sno' && key !== 'user' && key !== 'problemid' && key !== 'problemname' && key !== 'submissionID')) {%> 
                             <%= key %>
                         <% } %>
                     <%} %>
+                </li>
+                <li>
+                    <% let userLink = "https://codeforces.com/profile/" + problemsData[i].user%>
+                    User : <a href="<%= userLink %>"> <%= problemsData[i].user %> </a>
                 </li>
             </ul>
         </div>  
     <% } %>
 </div>
+
+<form action="/tag" method="POST">
+    <select class="tagselect" name="tagselect" multiple="multiple">
+        <option value="2-sat">2-sat</option>
+        <option value="binary search">binary search</option>
+        <option value="bitmasks">bitmasks</option>
+        <option value="brute force">bruteforce</option>
+        <option value="chinese remainder theorem">Chinese Remainder Theorem</option>
+        <option value="combinatorics">Combinatorics</option>
+        <option value="constructive algorithms">Constructive algorithms</option>
+        <option value="data structures">Data Structures</option>
+        <option value="dfs and similar">DFS and Similar</option>
+        <option value="dsu">Disjoint Set Union (DSU)</option>
+        <option value="dp">Dynamic Programming (DP)</option>
+        <option value="divide and conquer">Divide and Conquer</option>
+        <option value="expression parsing">Expression parsing</option>
+        <option value="flows">Flows</option>
+        <option value="fft">Fast Fourier Transform (FFT)</option>
+        <option value="games">Games</option>
+        <option value="geometry">Geometry</option>
+        <option value="graph matchings">Graph matchings</option>
+        <option value="graphs">Graphs</option>
+        <option value="greedy">Greedy</option>
+        <option value="hashing">Hashing</option>
+        <option value="implementation">Implementation</option>
+        <option value="interactive">Interactive</option>
+        <option value="math">Math</option>
+        <option value="matrices">Matrices</option>
+        <option value="meet-in=the-middle">Meet-in-the-middle</option>
+        <option value="number theory">Number Theory</option>
+        <option value="probabilities">Probabilities</option>
+        <option value="schedules">Schedules</option>
+        <option value="shortest paths">Shortest paths</option>
+        <option value="Sortings">Sortings</option>
+        <option value="string suffix structures">String Suffix Structures</option>
+        <option value="strings">Strings</option>
+        <option value="ternary search">Ternary Search</option>
+        <option value="trees">Trees</option>
+        <option value="two pointers">Two pointers</option>
+    </select>
+    <input type="submit" value="Apply" />
+</form>
+<script>
+  $(document).ready(function() {
+    $('.tagselect').select2();
+});
+</script>

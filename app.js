@@ -20,15 +20,11 @@ const db = new pg.Client({
 
 db.connect();
 
-app.get("/", (req, res) => {
-    res.render("handle.ejs");
-});
-
-app.get("/dashboard", async (req, res) => {
+app.get("/", async (req, res) => {
     try {
         const result = await db.query(`SELECT * from (select * from ${tableName} ORDER BY \"sno\" desc LIMIT 10) sub ORDER BY \"sno\" ASC`);
+
         const ListProblems = result.rows;
-        console.log(ListProblems);
         res.render("dashboard.ejs", { problemsData: ListProblems });
     } catch (err) {
         console.error("Failed to make query", err.stack);
@@ -40,43 +36,53 @@ app.get("/upload", (req, res) => {
     res.render("problemupload.ejs")
 })
 
+app.get('/problem/:id', async (req, res) => {
+    try {
+    const result = await db.query(`SELECT * from ${tableName} where "submissionID" = '${req.params.id}'`)
+    console.log(result.rows);
+    res.render("problemcard.ejs", {problemsData : result.rows[0]})
+    } catch(err) {
+        console.error("failed to make query", err.stack)
+        res.status(500).send("Error occurred while fetching problems");
+    }
+})
+
 app.post("/submit", async (req, res) => {
     const uploadedProblemID = req.body.subCode;
     const handle = req.body.currentHandle;
     const comment = req.body.comments;
     let uploadedProblem = "";
-    console.log(handle)
+   
     const CF_request =  await axios.get(`https://codeforces.com/api/user.status?handle=${handle}&from=1&count=100000`);
     const recentSubmissions = CF_request.data.result;
-    console.log(uploadedProblemID);
+   
     for(let i = 0; i < recentSubmissions.length; i++){
         if(recentSubmissions[i].id == uploadedProblemID){
             uploadedProblem = recentSubmissions[i];
             break;
         }
     }
-    
+   
     if(uploadedProblem === ""){
         let errorMessage = "Could not find submission in user history.";
         res.render("problemupload.ejs", {message : errorMessage})
     } 
     else{
-        let dbArray = [handle, uploadedProblem.problem.contestId + uploadedProblem.problem.index, uploadedProblem.problem.name];
-        console.log(dbArray);
+        let dbArray = [handle, uploadedProblem.problem.contestId + uploadedProblem.problem.index, uploadedProblem.problem.name, comment, (uploadedProblem.problem.rating ? uploadedProblem.problem.rating : "unknown")];
         let problemTags = uploadedProblem.problem.tags.map((tag) => {
             return '"' + tag + '"'
         });
-        let sizeArray = ["$1", "$2", "$3"]
+        let sizeArray = ["$1", "$2", "$3", "$4", "$5"]
         for(let i = 0 ; i < uploadedProblem.problem.tags.length + 1; i++){
-            if(i < uploadedProblem.problem.tags.length){
+            if(i < uploadedProblem.problem.tags.length){    
                 dbArray.push('t');
             }
-            sizeArray.push(`$${i+4}`);
+            sizeArray.push(`$${i+6}`);
         }
         dbArray.push(uploadedProblemID);
-        console.log(dbArray);
-        let text = `INSERT INTO ${tableName} ("user", problemid, problemname,` + problemTags.toString() + ",\"submissionID\") VALUES (" + sizeArray.toString() + ")" ;
-        console.log(text);
+       
+        let text = `INSERT INTO ${tableName} ("user", problemid, problemname, comment, rating, ` + problemTags.toString() + ",\"submissionID\") VALUES (" + sizeArray.toString() + ")" ;
+     
         db.query(text, dbArray)
         res.redirect("/upload");
     }
@@ -84,19 +90,23 @@ app.post("/submit", async (req, res) => {
 
 app.post("/tag", async (req, res) => {
     let tag = req.body["tagselect"];
-    console.log(req.body["tagselect"]);
+   
     try {
         let dbRequest = `SELECT * FROM ${tableName} where `;
-        for(let i = 0; i < tag.length; i++){
-            dbRequest += "\"" + tag[i] + "\" ";
-            dbRequest += "= 't' ";
-            if(i < tag.length - 1)
-                dbRequest += "AND ";
+     
+        if(typeof(tag) == "string")
+            dbRequest += "\"" + tag + "\" = 't' ";
+        else{
+            for(let i = 0; i < tag.length; i++){
+                dbRequest += "\"" + tag[i] + "\" = 't' ";
+                if(i < tag.length - 1)
+                    dbRequest += "AND ";
+            }
         }
-        console.log(dbRequest)
+       
         const result = await db.query(dbRequest);
         const ListProblems = result.rows;
-        console.log(ListProblems);
+  
         res.render("dashboard.ejs", { problemsData: ListProblems });
     } catch (err) {
         console.error("Failed to make query", err.stack);

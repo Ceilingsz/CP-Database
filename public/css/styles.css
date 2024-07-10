@@ -16,6 +16,13 @@
     flex-wrap: wrap;
 }
 
+.card-container {
+    width:80%;
+    display: inline-block;
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .problem-card {
     border: black;
     border-style: solid;
@@ -25,11 +32,12 @@
     background-color: rgb(240, 235, 227);
     font-size:xx-large;  
     padding:none;
-    width: 63vh;
+    width: 50vh;
     height:48vh;
     margin-left: 5vh;
+    word-wrap: break-word;
+    overflow: hidden;
 }
-
 .problem-data {
     font-size: x-large;
     text-align: left;
@@ -48,4 +56,14 @@
     top: 30%;
     left: 40%;
     background-color: antiquewhite;
+}
+
+.tag-filter {
+    text-wrap: wrap;
+    border-left: solid;
+    padding-left: 0.5%;
+}
+
+.problem-box {
+    font-size: larger;
 }

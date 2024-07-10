@@ -1,0 +1,26 @@
+<%- include("partials/header.ejs") %>
+
+<div class="problem-box">
+    <div style="border-bottom: solid; text-align: center; font-size: larger;">
+        <% let probLink = `/problem/${problemsData.submissionID}`%>
+        <a href="<%= probLink %>">
+    <%= problemsData.problemid %> : <%= problemsData.problemname %>
+        </a>
+    </div>
+    <ul class="problem-data" style="list-style: none;">
+        <li>
+            <% let userLink = "https://codeforces.com/profile/" + problemsData.user%>
+            User : <a href="<%= userLink %>"> <%= problemsData.user %> </a>
+        </li>
+        <li>
+            <% let submissionLink = "https://codeforces.com/contest/" + problemsData.problemid.substring(0, problemsData.problemid.length-1) + "/submission/" + problemsData.submissionID %>
+            <a href="<%= submissionLink %>" > Submission Link </a> 
+        </li>
+        <li>
+        Rating : <%= problemsData.rating %>
+        </li>
+        <li>
+            Comments : <%= problemsData.comment %>
+        </li>
+    </ul>
+</div>  

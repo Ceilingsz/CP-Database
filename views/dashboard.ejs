@@ -5,7 +5,7 @@
     <% for(let i = 0 ; i < problemsData.length; i++){ %>
         <div class="problem-card">
             <div style="border-bottom: solid;">
-                <% let probLink = `/problem/${problemsData[i].submissionID}`%>
+                <% let probLink = `/problem/${problemsData[i].submissionid}`%>
                 <a href="<%= probLink %>">
             <%= problemsData[i].problemid %> : <%= problemsData[i].problemname %>
                 </a>
@@ -16,15 +16,21 @@
                     User : <a href="<%= userLink %>"> <%= problemsData[i].user %> </a>
                 </li>
                 <li>
-                    <% let submissionLink = "https://codeforces.com/contest/" + problemsData[i].problemid.substring(0, problemsData[i].problemid.length-1) + "/submission/" + problemsData[i].submissionID %>
+                    <% let submissionLink = "https://codeforces.com/contest/" + problemsData[i].problemid.substring(0, problemsData[i].problemid.length-1) + "/submission/" + problemsData[i].submissionid %>
                     <a href="<%= submissionLink %>" > Submission Link </a> 
                 </li>
                 <li>
                 Rating : <%= problemsData[i].rating %>
                 </li>
                 <li>
-                    Comments : <%= problemsData[i].comment %>
-                </li>
+                    <% let tagsArray = [] %>
+                     <% for(let key in problemsData[i]){  %>
+                        <% if(problemsData[i].hasOwnProperty(key) && problemsData[i][key] !== null && (key !== 'sno' && key !== 'user' && key !== 'problemid' && key !== 'problemname' && key !== 'submissionid' && key !== 'comment' && key !== 'rating')) {%> 
+                            <% tagsArray.push(key) %>
+                        <% } %>
+                    <%} %>
+                    Tags : <%= tagsArray.toString() %>
+                </li>                
             </ul>
         </div>  
     <% } %>

@@ -2,7 +2,7 @@
 
 <div class="problem-box">
     <div style="border-bottom: solid; text-align: center; font-size: larger;">
-        <% let probLink = `/problem/${problemsData.submissionID}`%>
+        <% let probLink = `/problem/${problemsData.submissionid}`%>
         <a href="<%= probLink %>">
     <%= problemsData.problemid %> : <%= problemsData.problemname %>
         </a>
@@ -13,7 +13,7 @@
             User : <a href="<%= userLink %>"> <%= problemsData.user %> </a>
         </li>
         <li>
-            <% let submissionLink = "https://codeforces.com/contest/" + problemsData.problemid.substring(0, problemsData.problemid.length-1) + "/submission/" + problemsData.submissionID %>
+            <% let submissionLink = "https://codeforces.com/contest/" + problemsData.problemid.substring(0, problemsData.problemid.length-1) + "/submission/" + problemsData.submissionid %>
             <a href="<%= submissionLink %>" > Submission Link </a> 
         </li>
         <li>
@@ -21,6 +21,15 @@
         </li>
         <li>
             Comments : <%= problemsData.comment %>
+        </li>
+        <li>
+            <% let tagsArray = [] %>
+             <% for(let key in problemsData){  %>
+                <% if(problemsData.hasOwnProperty(key) && problemsData[key] !== null && (key !== 'sno' && key !== 'user' && key !== 'problemid' && key !== 'problemname' && key !== 'submissionid' && key !== 'comment' && key !== 'rating')) {%> 
+                    <% tagsArray.push(key) %>
+                <% } %>
+            <%} %>
+            Tags : <%= tagsArray.toString() %>
         </li>
     </ul>
 </div>  

@@ -62,6 +62,7 @@
     text-wrap: wrap;
     border-left: solid;
     padding-left: 0.5%;
+    height: 1000px;
 }
 
 .problem-box {

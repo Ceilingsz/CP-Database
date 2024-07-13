@@ -38,8 +38,8 @@ app.get("/upload", (req, res) => {
 
 app.get('/problem/:id', async (req, res) => {
     try {
-    const result = await db.query(`SELECT * from ${tableName} where "submissionID" = '${req.params.id}'`)
-    console.log(result.rows);
+    const result = await db.query(`SELECT * from ${tableName} where submissionid = '${req.params.id}'`)
+    console.log(result.rows[0]);
     res.render("problemcard.ejs", {problemsData : result.rows[0]})
     } catch(err) {
         console.error("failed to make query", err.stack)
@@ -48,11 +48,12 @@ app.get('/problem/:id', async (req, res) => {
 })
 
 app.post("/submit", async (req, res) => {
-    const uploadedProblemID = req.body.subCode;
+    const uploadedProblemID = req.body.subCode.trim();
     const handle = req.body.currentHandle;
     const comment = req.body.comments;
     let uploadedProblem = "";
-   
+
+    console.log(uploadedProblemID)
     const CF_request =  await axios.get(`https://codeforces.com/api/user.status?handle=${handle}&from=1&count=100000`);
     const recentSubmissions = CF_request.data.result;
    
@@ -81,7 +82,7 @@ app.post("/submit", async (req, res) => {
         }
         dbArray.push(uploadedProblemID);
        
-        let text = `INSERT INTO ${tableName} ("user", problemid, problemname, comment, rating, ` + problemTags.toString() + ",\"submissionID\") VALUES (" + sizeArray.toString() + ")" ;
+        let text = `INSERT INTO ${tableName} ("user", problemid, problemname, comment, rating, ` + problemTags.toString() + ",\"submissionid\") VALUES (" + sizeArray.toString() + ")" ;
      
         db.query(text, dbArray)
         res.redirect("/upload");

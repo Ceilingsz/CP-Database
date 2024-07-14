@@ -1,88 +1,119 @@
+<% if(currentUser === null){ %>
+<%- include("partials/header-loggedout.ejs") %>
+    <% } else { %>
 <%- include("partials/header.ejs") %>
+<% } %>
 
-<div class="problem-container">
-    <div class="card-container">
-    <% for(let i = 0 ; i < problemsData.length; i++){ %>
-        <div class="problem-card">
-            <div style="border-bottom: solid;">
-                <% let probLink = `/problem/${problemsData[i].submissionid}`%>
-                <a href="<%= probLink %>">
-            <%= problemsData[i].problemid %> : <%= problemsData[i].problemname %>
-                </a>
-            </div>
-            <ul class="problem-data">
-                <li>
-                    <% let userLink = "https://codeforces.com/profile/" + problemsData[i].user%>
-                    User : <a href="<%= userLink %>"> <%= problemsData[i].user %> </a>
-                </li>
-                <li>
-                    <% let submissionLink = "https://codeforces.com/contest/" + problemsData[i].problemid.substring(0, problemsData[i].problemid.length-1) + "/submission/" + problemsData[i].submissionid %>
-                    <a href="<%= submissionLink %>" > Submission Link </a> 
-                </li>
-                <li>
-                Rating : <%= problemsData[i].rating %>
-                </li>
-                <li>
-                    <% let tagsArray = [] %>
-                     <% for(let key in problemsData[i]){  %>
-                        <% if(problemsData[i].hasOwnProperty(key) && problemsData[i][key] !== null && (key !== 'sno' && key !== 'user' && key !== 'problemid' && key !== 'problemname' && key !== 'submissionid' && key !== 'comment' && key !== 'rating')) {%> 
-                            <% tagsArray.push(key) %>
-                        <% } %>
-                    <%} %>
-                    Tags : <%= tagsArray.toString() %>
-                </li>                
-            </ul>
-        </div>  
+<div class="dashboard">
+    <% if(currentUser === null){ %>
+       <div style="position: absolute; left: 25%; top: 50%;"> Login to view uploaded problems </div>
     <% } %>
+    <div class="problem-container">
+        <% for(let i = 0 ; i < problemsData.length; i++){ %>
+            <div class="problem-card">  
+                <div style="border-bottom: solid;">
+                    <% let probLink = `/problem/${problemsData[i].submissionid}`%>
+                    <a href="<%= probLink %>">
+                        <%= problemsData[i].problemid %> : <%= problemsData[i].problemname %>
+                    </a>
+                </div>
+                <ul class="problem-data">
+                    <li>
+                        <% let userLink = "https://codeforces.com/profile/" + problemsData[i].user%>
+                        User : <a href="<%= userLink %>"> <%= problemsData[i].user %> </a>
+                    </li>
+                    <li>
+                        <% let submissionLink = "https://codeforces.com/contest/" + problemsData[i].problemid.substring(0, problemsData[i].problemid.length-1) + "/submission/" + problemsData[i].submissionid %>
+                        <a href="<%= submissionLink %>" > Submission Link </a> 
+                    </li>
+                    <li>
+                        Rating : <%= problemsData[i].rating %>
+                    </li>
+                    <li>
+                        <% let tagsArray = [] %>
+                        <% for(let key in problemsData[i]){  %>
+                            <% if(problemsData[i].hasOwnProperty(key) && problemsData[i][key] !== null && (key !== 'sno' && key !== 'user' && key !== 'problemid' && key !== 'problemname' && key !== 'submissionid' && key !== 'comment' && key !== 'rating' && key !== 'favorite' && key !== 'verdict' && key !== 'email')) {%> 
+                                <% tagsArray.push(key) %>
+                            <% } %>
+                        <%} %>
+                        Tags : <%= tagsArray.toString() %>
+                    </li>  
+                    <li>
+                        Verdict : <%= problemsData[i].verdict %>
+                    </li>              
+                </ul>
+                <div class="bottom-right">
+                    <form action="/fav" method="POST">
+                        <input type="hidden" name="problemID" value="<%= problemsData[i].submissionid %>" />
+                        <% if(problemsData[i].favorite != true){ %>
+                        <button type="submit" class="favorite-button"><i class="fa-regular fa-star"></i></button>
+                        <input type="hidden" name="Fav" value="1">
+                        <% } else { %>  
+                        <button type="submit" class="favorite-button"><i class="fa fa-star"></i></button>
+                        <input type="hidden" name="Fav" value="0">
+                        <% } %>
+                    </form> 
+                </div>
+            </div> 
+        <% } %>                 
     </div>
 
     <div class="tag-filter">
-        Filter by tag : 
-    <form action="/tag" method="POST">
-        <select class="tagselect" name="tagselect" multiple="multiple">
-            <option value="2-sat">2-sat</option>
-            <option value="binary search">binary search</option>
-            <option value="bitmasks">bitmasks</option>
-            <option value="brute force">bruteforce</option>
-            <option value="chinese remainder theorem">Chinese Remainder Theorem</option>
-            <option value="combinatorics">Combinatorics</option>
-            <option value="constructive algorithms">Constructive algorithms</option>
-            <option value="data structures">Data Structures</option>
-            <option value="dfs and similar">DFS and Similar</option>
-            <option value="dsu">Disjoint Set Union (DSU)</option>
-            <option value="dp">Dynamic Programming (DP)</option>
-            <option value="divide and conquer">Divide and Conquer</option>
-            <option value="expression parsing">Expression parsing</option>
-            <option value="flows">Flows</option>
-            <option value="fft">Fast Fourier Transform (FFT)</option>
-            <option value="games">Games</option>
-            <option value="geometry">Geometry</option>
-            <option value="graph matchings">Graph matchings</option>
-            <option value="graphs">Graphs</option>
-            <option value="greedy">Greedy</option>
-            <option value="hashing">Hashing</option>
-            <option value="implementation">Implementation</option>
-            <option value="interactive">Interactive</option>
-            <option value="math">Math</option>
-            <option value="matrices">Matrices</option>
-            <option value="meet-in=the-middle">Meet-in-the-middle</option>
-            <option value="number theory">Number Theory</option>
-            <option value="probabilities">Probabilities</option>
-            <option value="schedules">Schedules</option>
-            <option value="shortest paths">Shortest paths</option>
-            <option value="Sortings">Sortings</option>
-            <option value="string suffix structures">String Suffix Structures</option>
-            <option value="strings">Strings</option>
-            <option value="ternary search">Ternary Search</option>
-            <option value="trees">Trees</option>
-            <option value="two pointers">Two pointers</option>
-        </select>
-        <input type="submit" value="Apply" />
-    </form>
+        <label>Filter by tag : </label><br>
+        <form action="/tag" method="POST">
+            <select class="tagselect" name="tagselect" multiple="multiple">
+                <option value="2-sat">2-sat</option>
+                <option value="binary search">binary search</option>
+                <option value="bitmasks">bitmasks</option>
+                <option value="brute force">bruteforce</option>
+                <option value="chinese remainder theorem">Chinese Remainder Theorem</option>
+                <option value="combinatorics">Combinatorics</option>
+                <option value="constructive algorithms">Constructive algorithms</option>
+                <option value="data structures">Data Structures</option>
+                <option value="dfs and similar">DFS and Similar</option>
+                <option value="dsu">Disjoint Set Union (DSU)</option>
+                <option value="dp">Dynamic Programming (DP)</option>
+                <option value="divide and conquer">Divide and Conquer</option>
+                <option value="expression parsing">Expression parsing</option>
+                <option value="flows">Flows</option>
+                <option value="fft">Fast Fourier Transform (FFT)</option>
+                <option value="games">Games</option>
+                <option value="geometry">Geometry</option>
+                <option value="graph matchings">Graph matchings</option>
+                <option value="graphs">Graphs</option>
+                <option value="greedy">Greedy</option>
+                <option value="hashing">Hashing</option>
+                <option value="implementation">Implementation</option>
+                <option value="interactive">Interactive</option>
+                <option value="math">Math</option>
+                <option value="matrices">Matrices</option>
+                <option value="meet-in=the-middle">Meet-in-the-middle</option>
+                <option value="number theory">Number Theory</option>
+                <option value="probabilities">Probabilities</option>
+                <option value="schedules">Schedules</option>
+                <option value="shortest paths">Shortest paths</option>
+                <option value="Sortings">Sortings</option>
+                <option value="string suffix structures">String Suffix Structures</option>
+                <option value="strings">Strings</option>
+                <option value="ternary search">Ternary Search</option>
+                <option value="trees">Trees</option>
+                <option value="two pointers">Two pointers</option>
+            </select>   
+            <div class="rating">
+                <label for="rating" style="align-items: center;">Rating: </label><br>
+                <input type="text" name="rating-lower" style="width:20%"/> - 
+                <input type="text" name="rating-upper" style="width:20%"/>
+            </div>
+            <div>
+                <label for="wantFav">Show Favorites</label>
+                <input type="radio" value="favorite" name="wantFav"/>
+            </div>
+            <input type="submit" value="Apply" />
+        </form>
     </div>
-    <script>
-        $(document).ready(function() {
-            $('.tagselect').select2();
-        });
-        </script>
 </div>
+<script>
+    $(document).ready(function() {
+        $('.tagselect').select2();
+    });
+</script>

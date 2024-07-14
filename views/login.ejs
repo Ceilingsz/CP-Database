@@ -1,0 +1,19 @@
+<%- include("partials/header-loggedout.ejs") %>
+
+<div class="register">
+    <% if(locals.message){ %>
+        <%= message %>
+    <% } %>
+    <form action="/login" method="POST">
+        <h3>Log in</h3>
+        <div>
+        <label for="email" style="font-size: larger;">Email</label><br>
+        <input type="text" placeholder="Email" name="email" class="reg-input">
+        </div>
+        <div>
+        <label for="password" style="font-size: larger;">Password</label><br>
+        <input type="password" placeholder="Password" name="password" class="reg-input">
+        </div>
+        <button>Log In</button> 
+    </form>
+</div>

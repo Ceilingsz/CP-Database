@@ -105,6 +105,21 @@
                 <input type="text" name="rating-upper" style="width:20%"/>
             </div>
             <div>
+                <label for="verdict">Filter by verdict</label><br>
+                <select name="verdict-select">
+                    <option value="Any" selected>Any</option>
+                    <option value="OK">OK</option>
+                    <option value="PARTIAL">Partial</option>
+                    <option value="MEMORY_LIMIT_EXCEEDED">Memory Limit Exceeded</option>
+                    <option value="TIME_LIMIT_EXCEEDED">Time Limit Exceeded</option>
+                    <option value="WRONG_ANSWER">Wrong Answer</option>
+                    <option value="RUNTIME_ERROR">Runtime Error</option>
+                    <option value="COMPILATION_ERROR">Compilation Error</option>
+                    <option value="IDLENESS_LIMIT_EXCEEDED">Idleness Limit Exceeded</option>
+                    <option value="SKIPPED">SKIPPED</option>
+                </select>
+            </div>
+            <div>
                 <label for="wantFav">Show Favorites</label>
                 <input type="radio" value="favorite" name="wantFav"/>
             </div>

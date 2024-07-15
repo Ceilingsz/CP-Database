@@ -159,6 +159,7 @@ app.post("/tag", async (req, res) => {
         tag = req.body["tagselect"];
     let lowerBound = req.body["rating-lower"];
     let upperBound = req.body["rating-upper"];
+    let verdictFilter = req.body["verdict-select"];
     let needFavs = 0;
     if("wantFav" in req.body){
         needFavs = 1;
@@ -167,6 +168,8 @@ app.post("/tag", async (req, res) => {
     if(upperBound == '')upperBound = 4000;
     try {   
         let dbRequest = `SELECT * FROM ${tableName} where rating >= ${lowerBound} AND rating <= ${upperBound} and email='${currentUserEmail}' `;
+        if(verdictFilter !== "Any")
+            dbRequest += `AND verdict = '${verdictFilter}' `;
         if(needFavs)
             dbRequest += `AND favorite = true `
         if("tagselect" in req.body){

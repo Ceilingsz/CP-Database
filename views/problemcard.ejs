@@ -20,16 +20,19 @@
         Rating : <%= problemsData.rating %>
         </li>
         <li>
-            Comments : <%= problemsData.comment %>
-        </li>
-        <li>
             <% let tagsArray = [] %>
-             <% for(let key in problemsData){  %>
-                <% if(problemsData.hasOwnProperty(key) && problemsData[key] !== null && (key !== 'sno' && key !== 'user' && key !== 'problemid' && key !== 'problemname' && key !== 'submissionid' && key !== 'comment' && key !== 'rating')) {%> 
+            <% for(let key in problemsData){  %>
+                <% if(problemsData.hasOwnProperty(key) && key !== 'email' && key !== 'verdict' && key !== 'favorite' && problemsData[key] !== null && (key !== 'sno' && key !== 'user' && key !== 'problemid' && key !== 'problemname' && key !== 'submissionid' && key !== 'comment' && key !== 'rating')) {%> 
                     <% tagsArray.push(key) %>
                 <% } %>
             <%} %>
             Tags : <%= tagsArray.toString() %>
+        </li>
+        <li>
+            Verdict : <%= problemsData.verdict %>
+        </li>
+        <li>
+            Comments : <%= problemsData.comment %>
         </li>
     </ul>
     

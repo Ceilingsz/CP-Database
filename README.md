@@ -1,4 +1,4 @@
-CP Database is an application that allows you to upload user submissions from codeforces for easy access. It uses Express JS for the backend with PostgreSQL for a database. 
+CP Database is an application that allows you to upload user submissions from codeforces for easy access. It uses Express JS for the backend with PostgreSQL for a database. It has been deployed at https://cfdb.onrender.com/ :) 
 
 # Set up to run locally
 

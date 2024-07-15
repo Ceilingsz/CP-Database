@@ -12,6 +12,7 @@ app.use(express.static("public"));
 let currentUserEmail = null;
 
 const tableName = "problems";
+const userTable = "users";
 
 const db = new pg.Client({
     user:"postgres",
@@ -34,7 +35,7 @@ app.get("/register", (req, res) => {
 app.post("/login", async (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
-    const result = await db.query(`select * from users where email = '${email}'`);
+    const result = await db.query(`select * from ${userTable} where email = '${email}'`);
     if(result.rows.length == 0){
         let errorMessage = "User has not been registered yet. Please register."
         res.render("register.ejs", {message : errorMessage})
@@ -50,6 +51,7 @@ app.post("/login", async (req, res) => {
                     res.redirect("/dashboard");
                 }
                 else{
+                    let errorMessage = "Incorrect password. Try again."
                     res.render("login.ejs", {message : errorMessage})
                 }
             }
@@ -66,13 +68,13 @@ app.post("/register",async (req, res) => {
             res.status(500).send("Error occurred while salting");
         } else {
             try {
-                const result = await db.query(`SELECT * from users where email = '${email}'`);
+                const result = await db.query(`SELECT * from ${userTable} where email = '${email}'`);
                 if(result.rows.length > 0){
                     let errorMessage = "User with this email already exists. Try logging in.";
                     res.render("register.ejs", {message : errorMessage})
                 } else {
                     password = hash;
-                    await db.query("INSERT INTO users (email, \"password\") VALUES ($1, $2)", [email, password]);
+                    await db.query(`INSERT INTO ${userTable} (email, \"password\") VALUES ($1, $2)`, [email, password]);
                     res.redirect("/dashboard")
                 }
             } catch (error) {

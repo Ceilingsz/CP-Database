@@ -5,7 +5,7 @@ create table problems (
 	"user" varchar(100),
 	problemid varchar(15),
 	problemname varchar(50),
-	submissionID varchar(50) UNIQUE NOT NULL, 
+	submissionID varchar(50) NOT NULL, 
 	rating INT,
 	favorite bool,
 	"2-sat" bool,

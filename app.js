@@ -19,7 +19,7 @@ const db = new pg.Client({
     password:"123456",
     host:"localhost",
     database:"cfproblems",
-    port:5432
+    port:5432,
 });
 
 db.connect();
@@ -128,7 +128,12 @@ app.post("/submit", async (req, res) => {
             break;
         }
     }
-   
+    const result = await db.query(`select * from problems where email = '${currentUserEmail}' and submissionid = '${uploadedProblemID}'`);
+    console.log(result.rows);    
+    if(result.rows.length > 0){
+        let errorMessage = "Problem already uploaded.";
+        res.render("problemupload.ejs", {message : errorMessage})
+    } else {
     if(uploadedProblem === ""){
         let errorMessage = "Could not find submission in user history.";
         res.render("problemupload.ejs", {message : errorMessage})
@@ -152,7 +157,7 @@ app.post("/submit", async (req, res) => {
      
         db.query(text, dbArray)
         res.redirect("/upload");
-    }
+    }}
 });
 
 app.post("/tag", async (req, res) => {
